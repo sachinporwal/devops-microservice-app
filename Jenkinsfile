@@ -8,11 +8,18 @@ pipeline {
             }
         }
 
-        stage("Build Image") {
-            steps {
-                sh "docker build -t microservice:ci ."
-            }
+        stage("Build and Push") {
+          steps {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+              sh """
+              docker build -t $USER/microservice:latest .
+              echo $PASS | docker login -u $USER --password-stdin
+              docker push $USER/microservice:latest
+              """
+           }
+         }
         }
+
 
         stage("Run Tests") {
             steps {
