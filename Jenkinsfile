@@ -8,17 +8,15 @@ pipeline {
             }
         }
 
-        stage("Build Docker Image") {
+        stage("Build Image") {
             steps {
                 sh "docker build -t microservice:ci ."
             }
         }
 
-        stage("Run Tests Inside Container") {
+        stage("Run Tests") {
             steps {
-                sh """
-                docker run --rm microservice:ci pytest
-                """
+                sh "docker run --rm microservice:ci pytest app/tests"
             }
         }
     }

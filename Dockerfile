@@ -2,11 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY app/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt pytest
+ENV PYTHONPATH=/app
 
-COPY app app
-COPY app/tests tests
+COPY app /app/app
+
+RUN pip install flask pytest
 
 EXPOSE 5000
 
