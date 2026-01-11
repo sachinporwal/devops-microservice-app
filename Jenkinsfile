@@ -8,21 +8,17 @@ pipeline {
             }
         }
 
-        stage("Run Tests") {
+        stage("Build Docker Image") {
             steps {
-                sh """
-                cd app
-                python3 -m venv venv
-                chmod +x venv/bin/*
-                venv/bin/python -m pip install -r requirements.txt
-                venv/bin/python -m pytest
-                """
+                sh "docker build -t microservice:ci ."
             }
         }
 
-        stage("Build Docker Image") {
+        stage("Run Tests Inside Container") {
             steps {
-                sh "docker build -t microservice:latest ."
+                sh """
+                docker run --rm microservice:ci pytest
+                """
             }
         }
     }
