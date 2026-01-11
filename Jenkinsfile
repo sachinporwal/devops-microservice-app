@@ -13,9 +13,8 @@ pipeline {
                 sh """
                 cd app
                 python3 -m venv venv
-                source venv/bin/activate
-                pip install -r requirements.txt
-                pytest
+                ./venv/bin/pip install -r requirements.txt
+                ./venv/bin/pytest
                 """
             }
         }
